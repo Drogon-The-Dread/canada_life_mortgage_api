@@ -83,16 +83,7 @@ curl -s http://localhost:3000/api/v1/mortgage_applications/1/assessment
 
 ## Swagger UI
 
-Interactive API docs are served at `/api-docs`.
-
-Access is protected by HTTP Basic Auth. Default credentials (override via env vars):
-
-```
-SWAGGER_USERNAME=swagger
-SWAGGER_PASSWORD=changeme
-```
-
-Copy `.env.example` and set real values before deploying.
+Interactive API docs are served at `/api-docs` (and at the root URL `/`).
 
 ---
 
@@ -115,8 +106,6 @@ The test suite covers:
 docker build -t canada-life-mortgage-api .
 docker run -p 3000:80 \
   -e RAILS_MASTER_KEY=$(cat config/master.key) \
-  -e SWAGGER_USERNAME=swagger \
-  -e SWAGGER_PASSWORD=changeme \
   canada-life-mortgage-api
 ```
 
@@ -193,7 +182,7 @@ Affordability rules (LTV threshold, DTI threshold, income multiple, rate) are de
 **Deliberately kept simple:**
 
 - **Fixed rate (5%)** — a real implementation would fetch current rates from a market data API. Removed to keep the service self-contained and the test suite deterministic.
-- **No authentication on the API itself** — HTTP Basic Auth secures Swagger UI; the API endpoints are open. Production would use API keys or OAuth tokens.
+- **No authentication on the API itself** — the API endpoints are open. Production would use API keys or OAuth tokens.
 - **SQLite** — zero-config for development and CI; would be replaced by PostgreSQL before any meaningful traffic.
 - **No background jobs** — assessments are synchronous. Solid Queue is already present for when this becomes necessary.
 
