@@ -6,6 +6,11 @@ gem "rails", "~> 8.1.3"
 gem "sqlite3", ">= 2.1"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
+
+# Swagger UI and OpenAPI spec serving
+gem "rswag-api", "~> 2.16"
+gem "rswag-ui",  "~> 2.16"
+
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
 

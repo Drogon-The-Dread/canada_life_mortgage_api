@@ -1,0 +1,232 @@
+---
+openapi: 3.0.1
+info:
+  title: Canada Life Mortgage API
+  version: v1
+  description: |
+    API for submitting and assessing mortgage applications.
+
+    **Affordability assumptions:**
+    - Fixed rate of 5% per annum (no external rate dependency)
+    - Maximum loan capped at 4.5× annual income (standard UK guideline)
+    - LTV threshold: 90%
+    - Debt-to-income threshold: 43%
+
+servers:
+  - url: http://localhost:3000
+    description: Local development
+
+paths:
+  /api/v1/mortgage_applications:
+    post:
+      summary: Submit a mortgage application
+      tags:
+        - Mortgage Applications
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MortgageApplicationInput'
+            example:
+              mortgage_application:
+                annual_income: 75000
+                monthly_expenses: 1500
+                deposit_amount: 50000
+                property_value: 300000
+                term_years: 25
+      responses:
+        '201':
+          description: Application created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MortgageApplication'
+        '422':
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrors'
+
+  /api/v1/mortgage_applications/{id}:
+    get:
+      summary: Retrieve a mortgage application
+      tags:
+        - Mortgage Applications
+      parameters:
+        - $ref: '#/components/parameters/ApplicationId'
+      responses:
+        '200':
+          description: Application found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MortgageApplication'
+        '404':
+          description: Application not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+
+  /api/v1/mortgage_applications/{id}/assessment:
+    get:
+      summary: Run affordability assessment
+      description: |
+        Evaluates affordability using three criteria:
+        1. **LTV ≤ 90%** — loan as a percentage of property value
+        2. **DTI ≤ 43%** — monthly expenses as a percentage of monthly income
+        3. **Loan ≤ 4.5× income** — standard UK affordability multiple
+
+        All three must pass for an approval.
+      tags:
+        - Affordability Assessment
+      parameters:
+        - $ref: '#/components/parameters/ApplicationId'
+      responses:
+        '200':
+          description: Assessment result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssessmentResult'
+              example:
+                loan_amount: 250000.0
+                loan_to_value: 83.33
+                debt_to_income_ratio: 24.0
+                max_borrowing: 337500.0
+                monthly_repayment: 1461.42
+                decision: approved
+                explanation: "Application approved. Monthly repayment estimated at £1461.42 over 25 years at 5% fixed rate."
+        '404':
+          description: Application not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+
+components:
+  parameters:
+    ApplicationId:
+      name: id
+      in: path
+      required: true
+      description: Mortgage application ID
+      schema:
+        type: integer
+        example: 1
+
+  schemas:
+    MortgageApplicationInput:
+      type: object
+      required:
+        - mortgage_application
+      properties:
+        mortgage_application:
+          type: object
+          required:
+            - annual_income
+            - monthly_expenses
+            - deposit_amount
+            - property_value
+            - term_years
+          properties:
+            annual_income:
+              type: number
+              description: Annual gross income in GBP
+              example: 75000
+            monthly_expenses:
+              type: number
+              description: Total monthly committed expenses in GBP
+              example: 1500
+            deposit_amount:
+              type: number
+              description: Deposit amount in GBP (must be less than property value)
+              example: 50000
+            property_value:
+              type: number
+              description: Property purchase price in GBP
+              example: 300000
+            term_years:
+              type: integer
+              description: Mortgage term in years (1–40)
+              example: 25
+
+    MortgageApplication:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        annual_income:
+          type: string
+          example: "75000.0"
+        monthly_expenses:
+          type: string
+          example: "1500.0"
+        deposit_amount:
+          type: string
+          example: "50000.0"
+        property_value:
+          type: string
+          example: "300000.0"
+        term_years:
+          type: integer
+          example: 25
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    AssessmentResult:
+      type: object
+      properties:
+        loan_amount:
+          type: number
+          example: 250000.0
+        loan_to_value:
+          type: number
+          description: LTV as a percentage
+          example: 83.33
+        debt_to_income_ratio:
+          type: number
+          description: DTI as a percentage
+          example: 24.0
+        max_borrowing:
+          type: number
+          description: Maximum loan based on 4.5× annual income
+          example: 337500.0
+        monthly_repayment:
+          type: number
+          description: Estimated monthly repayment at 5% fixed rate
+          example: 1461.42
+        decision:
+          type: string
+          enum: [approved, declined]
+          example: approved
+        explanation:
+          type: string
+          example: "Application approved. Monthly repayment estimated at £1461.42 over 25 years at 5% fixed rate."
+
+    ValidationErrors:
+      type: object
+      properties:
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          example:
+            annual_income: ["must be greater than 0"]
+            deposit_amount: ["must be less than property value"]
+
+    NotFound:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Mortgage application not found
