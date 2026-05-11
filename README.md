@@ -31,7 +31,7 @@ bin/rails db:prepare
 bin/rails s
 ```
 
-The API is available at the address returned in the Terminal.
+The root URL redirects to the Swagger UI at `/api-docs`.
 
 ---
 
