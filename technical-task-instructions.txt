@@ -1,0 +1,128 @@
+Ruby on Rails Technical Test 
+Mortgage Application API (Lead Engineer) 
+  
+Overview 
+Thank you for taking the time to complete this technical exercise. 
+The goal of this test is to understand how you approach building a small, well-structured application using Ruby on Rails, and how you think about evolving it into a production system. 
+You are welcome to use any tools you are comfortable with, including AI-assisted tools. During the follow-up interview, we will discuss your implementation and the decisions you made. 
+  
+Scenario 
+You are tasked with building a simple backend service for managing mortgage applications. 
+The service should allow users to: 
+•	Submit a mortgage application 
+•	Retrieve an existing application 
+•	Perform a basic affordability assessment 
+  
+Requirements 
+1. Create a Mortgage Application 
+Provide an endpoint to create a mortgage application with the following fields: 
+•	Annual income 
+•	Monthly expenses 
+•	Deposit amount 
+•	Property value 
+•	Term (in years) 
+You should: 
+•	Validate inputs appropriately 
+•	Persist the application 
+  
+2. Retrieve a Mortgage Application 
+Provide an endpoint to retrieve a previously created application. 
+  
+3. Affordability Assessment 
+Provide an endpoint to assess affordability for a given application. 
+The assessment should include: 
+•	Loan-to-value (LTV) 
+•	Debt-to-income ratio 
+•	A decision: approved or declined 
+•	A maximum borrowing estimate 
+•	A short explanation for the decision 
+You are free to define the exact calculation logic, but it should be reasonable and clearly explained. 
+The affordability logic does not need to be realistic or comprehensive. We are not assessing domain knowledge in mortgage underwriting. 
+Focus on a simple, reasonable approach and clearly express any assumptions you make. 
+  
+Technical Expectations 
+We expect a Ruby on Rails application that demonstrates good use of the framework. 
+This includes: 
+•	Clear model structure and relationships 
+•	Use of validations 
+•	Thoughtful organisation of business logic 
+•	Clean and readable code 
+•	Appropriate use of Rails conventions 
+The application should expose a JSON API. 
+  
+Testing 
+Automated tests are required. 
+At a minimum, include tests for: 
+•	Core business logic (e.g. affordability calculations) 
+•	Any critical validation rules 
+You may use RSpec or Minitest. 
+  
+Optional Enhancements 
+These are not required, but may be used to demonstrate additional capability: 
+•	Background processing for assessments 
+•	Basic authentication 
+•	Docker support 
+•	Logging or instrumentation 
+  
+Documentation 
+Please include a README with: 
+•	Setup instructions 
+•	How to run the application 
+•	How to run tests 
+  
+Design & Reflection (Lead) 
+Please include a short section in your README addressing the following: 
+1. Key Design Decisions 
+Describe 2–3 key design decisions you made in your implementation and why you chose them. 
+  
+2. System Evolution 
+If this service needed to support a production mortgage platform, how would you evolve your current implementation? 
+Focus on: 
+•	System boundaries (what stays vs what might be separated) 
+•	Handling increased load 
+•	Introducing asynchronous processing where appropriate 
+  
+3. Operational Considerations 
+How would you ensure this system is reliable and safe to operate in production? 
+You may consider: 
+•	Failure handling 
+•	Monitoring and observability 
+•	Data integrity and auditability 
+  
+4. Change & Flexibility 
+Affordability rules change frequently and may be updated by non-engineering teams. 
+How would you adapt your design to support this without requiring constant redeployment? 
+  
+5. Trade-offs & Prioritisation 
+Given limited time, what did you deliberately keep simple or leave out? 
+If you were to improve this system over the next 1–2 weeks, what would you prioritise and why? 
+  
+Submission 
+Please provide your solution as: 
+•	A GitHub repository (preferred), or 
+•	A compressed archive of the codebase 
+  
+Time Expectation 
+This test is designed to take a few hours. 
+We are not expecting a production-ready system. Focus on clarity, structure, and demonstrating your approach. 
+  
+Follow-Up Discussion 
+In the next stage, we will walk through your solution together. 
+We will use your README as the primary guide for this discussion, so please ensure it clearly explains: 
+•	How your application is structured 
+•	Key design decisions and why you made them  
+•	How your assessment logic works and any assumptions you made  
+•	How your solution would evolve into a production system  
+•	How your solution could be deployed and operated across different environments, and what design decisions support or limit this  
+The goal is to have an engaging discussion about your approach, trade-offs, and reasoning. We may ask follow-up questions and explore how your solution could evolve in a real-world scenario. 
+Environment & Setup Walkthrough 
+As part of the discussion, we will ask you to walk through setting up and running your application using your README. 
+This will typically involve: 
+•	Cloning the repository into a fresh location  
+•	Installing dependencies  
+•	Running the application and tests  
+The intention is not to test your local environment, but to understand how clearly your solution can be set up and operated by another engineer starting from scratch. 
+Please ensure your README provides clear, complete instructions to support this. 
+  
+Good luck, and we look forward to discussing your work. 
+
